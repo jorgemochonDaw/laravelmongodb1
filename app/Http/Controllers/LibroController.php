@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SaveLibro;
 use App\Models\Libro;
-use Illuminate\Http\Request;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Models\Category;
+use App\Http\Requests\SaveLibro;
+use App\Http\Controllers\Controller;
+
 
 class LibroController extends Controller
 {
@@ -16,8 +17,37 @@ class LibroController extends Controller
      */
     public function index()
     {
-        $libros = Libro::orderBy('created_at','desc')->paginate(10);
-        return view('dashboard.libro.index',['libros' => $libros]);
+        $this->testhasOne();
+        $this->testhasOneEmbedido();
+        $this->hasMany();
+        $libros = Libro::orderBy('created_at', 'desc')->paginate(10);
+        return view('dashboard.libro.index', ['libros' => $libros]);
+    }
+
+    private function testhasOne()
+    {
+        // $b = Libro::find('61a38157f5cdec8fff083438');
+        // $c = Category::find('61a3825df5cdec8fff08343a');
+        // $b->category()->save($c);
+
+    }
+
+    private function testhasOneEmbedido()
+    {
+        // $b = Libro::find('61a381eef5cdec8fff083439');
+        // $c = Category::find('61a3df880a7b042d122d1ac4')->ToArray();
+        // $b->category = $c;
+        // $b->save();
+        // dd($b->category);
+    }
+
+    private function hasMany()
+    {
+        $b = Libro::find('61a3ec1d0a7b042d122d1acb');
+        $c = Category::find('61a3ebf80a7b042d122d1ac9');
+        $c->libros()->save($b);
+        // dd($c->libros);
+        dd($b->category);
     }
 
     /**
@@ -39,8 +69,8 @@ class LibroController extends Controller
     public function store(SaveLibro $request)
     {
         // Libro::create($request->all());
-        Libro::create($request->validated());//Para poner tus validaciones personalizadas
-        return back()->with('status','Libro creado');
+        Libro::create($request->validated()); //Para poner tus validaciones personalizadas
+        return back()->with('status', 'Libro creado');
     }
 
     /**
@@ -75,7 +105,7 @@ class LibroController extends Controller
     public function update(SaveLibro $request, Libro $libro)
     {
         $libro->update($request->validated());
-        return back()->with('status','Libro ' . $libro->title .  ' actualizado correctamente');
+        return back()->with('status', 'Libro ' . $libro->title .  ' actualizado correctamente');
     }
 
     /**

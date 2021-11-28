@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LibroController;
-
+use App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,8 +28,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
-Route::resource('/libro',LibroController::class);
 
-Route::group(['prefix' => '', 'namespace' => '', 'middleware' => 'auth'], function () {
-    Route::resource('/libro',LibroController::class);
+
+Route::group(['prefix' => 'dashboard', 'namespace' => '', 'middleware' => 'auth'], function () {
+    Route::resource('libro',LibroController::class);
+    Route::resource('category', CategoryController::class);
 });
+
+//nameespace donde se ubica las clases
