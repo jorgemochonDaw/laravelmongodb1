@@ -20,6 +20,7 @@ class LibroController extends Controller
         $this->testhasOne();
         $this->testhasOneEmbedido();
         $this->hasMany();
+        $this->hasManyOll();
         $libros = Libro::orderBy('created_at', 'desc')->paginate(10);
         return view('dashboard.libro.index', ['libros' => $libros]);
     }
@@ -43,11 +44,19 @@ class LibroController extends Controller
 
     private function hasMany()
     {
-        $b = Libro::find('61a3ec1d0a7b042d122d1acb');
-        $c = Category::find('61a3ebf80a7b042d122d1ac9');
-        $c->libros()->save($b);
-        // dd($c->libros);
-        dd($b->category);
+        // $b = Libro::find('61a3ec1d0a7b042d122d1acb');
+        // $c = Category::find('61a3ebf80a7b042d122d1ac9');
+        // $c->libros()->save($b);
+        // // dd($c->libros);
+        // dd($b->category);
+    }
+
+    private function hasManyOll() {
+        // $b = Libro::find('61a4b77c65cf00b4ff590322');
+        // $c = Category::find('61a4bc1a65cf00b4ff590324')->ToArray();
+        // $b->push('categorias',$c);
+        // $b->save();
+        // dd($b->categorias);
     }
 
     /**
@@ -57,7 +66,7 @@ class LibroController extends Controller
      */
     public function create()
     {
-        return view('dashboard.libro.create', ['libro' => new Libro()]);
+        return view('dashboard.libro.create', ['libro' => new Libro(),'categorias' => Category::pluck('_id','title')]);
     }
 
     /**
@@ -92,7 +101,7 @@ class LibroController extends Controller
      */
     public function edit(Libro $libro)
     {
-        return view('dashboard.libro.edit', ['libro' => $libro]);
+        return view('dashboard.libro.edit', ['libro' => $libro,'categorias' => Category::pluck('_id','title')]);
     }
 
     /**
